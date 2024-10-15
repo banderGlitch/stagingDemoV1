@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {ReadOnlyTransaction}  from './SendDonateComp';
 import { TransactionForm } from '../SuperCommonComp';
-const Donate = ({ setInput }) => {
+const Donate = ({ setInput , handleConfirm ,  showProgress}) => {
 
     const cryptoOptions = ['ETH', 'BTC', 'USDT', 'USDC', 'DAI'];
 
@@ -34,10 +34,10 @@ const Donate = ({ setInput }) => {
     };
 
     
-    const handleConfirm = () => {
-        console.log("Confirmed transaction:", { actionType: 'Send', amount, crypto, walletAddress });
-        // Add your confirmation logic here
-    };
+    // const handleConfirm = () => {
+    //     console.log("Confirmed transaction:", { actionType: 'Send', amount, crypto, walletAddress });
+    //     // Add your confirmation logic here
+    // };
 
 
 
@@ -92,6 +92,7 @@ const Donate = ({ setInput }) => {
                     walletAddress={walletAddress}
                     onConfirm={handleConfirm}
                     onEdit={handleEdit}
+                    showProgress={showProgress}
                 />
             )}
         </div>

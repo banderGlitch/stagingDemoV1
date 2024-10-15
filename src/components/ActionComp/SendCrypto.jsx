@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TransactionForm } from '../SuperCommonComp';
 import {ReadOnlyTransaction }  from './SendDonateComp';
-const SendCrypto = ({ setInput }) => {
+const SendCrypto = ({ setInput , handleConfirm , showProgress }) => {
 
     const cryptoOptions = ['ETH', 'BTC', 'USDT', 'USDC', 'DAI'];
 
@@ -25,10 +25,10 @@ const SendCrypto = ({ setInput }) => {
         setIsEditable(true);
     }
 
-    const handleConfirm = () => {
-        console.log("Confirmed transaction:", { actionType: 'Send', amount, crypto, walletAddress });
-        // Add your confirmation logic here
-    };
+    // const handleConfirm = () => {
+    //     console.log("Confirmed transaction:", { actionType: 'Send', amount, crypto, walletAddress });
+    //     // Add your confirmation logic here
+    // };
 
 
 
@@ -66,6 +66,7 @@ const SendCrypto = ({ setInput }) => {
                     walletAddress={walletAddress}
                     onConfirm={handleConfirm}
                     onEdit={handleEdit}
+                    showProgress={showProgress}
                 />
                 // Non-editable display of the current values
                 // <div className='flex flex-row justify-center'>

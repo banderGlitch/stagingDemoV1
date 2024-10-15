@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '../../commonComp';
-const ReadOnlyTransaction = ({ actionType, amount, crypto, walletAddress, onConfirm, onEdit }) => {
+const ReadOnlyTransaction = ({ actionType, amount, crypto, walletAddress, onConfirm, onEdit , showProgress}) => {
     return (
         <div className='flex flex-row justify-center'>
             <div className='flex flex-row items-center space-x-2'>
@@ -14,16 +14,21 @@ const ReadOnlyTransaction = ({ actionType, amount, crypto, walletAddress, onConf
 
             {/* Confirm and Edit buttons */}
             <div className='ml-4'>
+
+                {!showProgress &&
                 <Button
                     label="Confirm"
                     onClick={onConfirm}
                     className="bg-blue-500 text-white hover:bg-blue-700"
                 />
+                }
+                {!showProgress &&
                 <Button
                     label="Edit"
                     onClick={onEdit}
                     className="bg-yellow-500 text-white hover:bg-yellow-700 ml-2"
                 />
+                }
             </div>
         </div>
     );

@@ -1,0 +1,55 @@
+/* ProgressTerminal.css */
+.progress-terminal {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #1e1e1e;  /* Dark terminal background */
+    color: #dcdcdc;  /* Light terminal text color */
+    padding: 10px;  /* Reduced padding */
+    margin-top: 20px;
+    border-radius: 5px;
+    white-space: pre-wrap;  /* Allow multi-line wrapping like in terminal */
+    font-size: 12px;  /* Reduced font size for a more compact look */
+    max-width: 600px;
+    width: 100%;
+    text-align: left;  /* Align the text to the left */
+  }
+  
+  .progress-step {
+    margin: 2px 0;  /* Reduced margin between rows */
+    line-height: 1.2;  /* Reduced line height for a more compact look */
+  }
+  
+  .in-progress {
+    color: #61dafb;  /* Blue color for active step */
+  }
+  
+  .completed {
+    color: #98c379;  /* Green color for completed steps */
+  }
+  
+/* .progress-container {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  
+  .progress-list {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .progress-step {
+    margin: 10px 0;
+    padding: 5px 10px;
+    border-left: 3px solid #ddd;
+    color: #999;
+    font-size: 14px;
+  }
+  
+  .progress-step.active {
+    border-left-color: #4caf50;
+    color: #4caf50;
+    font-weight: bold;
+  }
+   */
