@@ -1,6 +1,7 @@
 import React from 'react';
 
 // Reusable Button Component
+// Resuable common component
 const Button = ({ label, onClick, className = "", style = {} }) => {
   return (
     <button
