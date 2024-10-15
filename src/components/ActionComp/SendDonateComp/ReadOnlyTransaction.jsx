@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button } from '../../common'; // Reusable Button component
-
+import { Button } from '../../commonComp';
 const ReadOnlyTransaction = ({ actionType, amount, crypto, walletAddress, onConfirm, onEdit }) => {
     return (
         <div className='flex flex-row justify-center'>

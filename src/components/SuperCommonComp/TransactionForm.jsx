@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { TextInput, NumberInput, Dropdown } from "../common";
+import { TextInput, NumberInput, Dropdown , Button} from '../commonComp';
 import { Tooltip } from 'react-tippy';
 import 'react-tippy/dist/tippy.css';
-import Button from '../common/Button'; // Reusable Button component
 
 const TransactionForm = ({
     actionType,   // e.g., "Donate" or "Send"

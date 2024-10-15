@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import searchActions from '../utils/fuzzySearch';
 import { SendCrypto, Donate, Vrf } from './ActionComp';
-import { TextInput } from './Common';
+import { TextInput } from './commonComp';
 
 const TypeAheadInput = () => {
     const [input, setInput] = useState('');
