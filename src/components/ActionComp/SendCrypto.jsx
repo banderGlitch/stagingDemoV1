@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Button from '../common/Button';
 import { TransactionForm } from '../SuperCommonComp';
 import {ReadOnlyTransaction }  from './SendDonateComp';
 const SendCrypto = ({ setInput }) => {
