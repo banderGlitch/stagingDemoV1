@@ -1,0 +1,40 @@
+/* Light Theme */
+.light {
+    --color-sidebar: #f0f0f0;
+    --color-sidebar-text: #333;
+    --color-main: #ffffff;
+    --color-main-text: #333;
+    --color-button: #007bff;
+    --color-button-text: #ffffff;
+  }
+  
+  /* Dark Theme */
+  .dark {
+    --color-sidebar: #333;
+    --color-sidebar-text: #f0f0f0;
+    --color-main: #1a1a1a;
+    --color-main-text: #f0f0f0;
+    --color-button: #4a90e2;
+    --color-button-text: #ffffff;
+  }
+  
+  /* Custom Theme */
+  .custom {
+    --color-sidebar: #2c3e50;
+    --color-sidebar-text: #ecf0f1;
+    --color-main: #34495e;
+    --color-main-text: #ecf0f1;
+    --color-button: #e74c3c;
+    --color-button-text: #ffffff;
+  }
+
+
+  
+  
+  /* Apply theme colors */
+  .bg-sidebar { background-color: var(--color-sidebar); }
+  .text-sidebar-text { color: var(--color-sidebar-text); }
+  .bg-main { background-color: var(--color-main); }
+  .text-main-text { color: var(--color-main-text); }
+  .bg-button { background-color: var(--color-button); }
+  .text-button-text { color: var(--color-button-text); }
