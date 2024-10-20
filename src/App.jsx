@@ -23,11 +23,11 @@ function App() {
  // Execute the getAccount function when the component is mounted
 
 
-  // useEffect(() => {
-  //   if (isConnected) {
-  //     getAccount()
-  //   }
-  // }, [isConnected])
+  useEffect(() => {
+    if (isConnected) {
+      getAccount()
+    }
+  }, [isConnected])
 
   const options = {
     startBlock: 5726000, // Starting block number
