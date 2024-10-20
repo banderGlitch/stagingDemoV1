@@ -1,0 +1,64 @@
+.terminal-container {
+    min-width: 600px;
+    margin: 0 auto;
+}
+
+.terminal-input-wrapper {
+    position: relative;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 4px;
+}
+
+.terminal-input {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    color: #e2e8f0;
+    font-size: 16px;
+    padding-left: 15px; /* Space for the cursor */
+    caret-color: transparent;
+}
+
+.blinking-cursor {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 20px;
+    background-color: #fffbfb;
+    animation: blink 0.7s infinite;
+}
+
+.terminal-suggestions {
+    background-color: #1e293b;
+    border-radius: 8px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.terminal-suggestion-item {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.terminal-suggestion-item:hover {
+    background-color: #2d3748;
+}
+
+.suggestion-name {
+    color: #4ade80;
+}
+
+.suggestion-description {
+    color: #94a3b8;
+}
+
+@keyframes blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+

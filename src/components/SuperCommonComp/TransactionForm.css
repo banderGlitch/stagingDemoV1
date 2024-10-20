@@ -1,0 +1,52 @@
+.terminal-form {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.terminal-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.terminal-prompt {
+    color: #00ff00;
+    margin-right: 10px;
+}
+
+.terminal-input {
+    background-color: transparent;
+    border: none;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 5px;
+    margin-right: 10px;
+}
+
+.terminal-input:focus {
+    outline: none;
+    border-bottom: 1px solid #00ff00;
+}
+
+.terminal-text {
+    margin-right: 10px;
+}
+
+.terminal-button {
+    background-color: #00ff00;
+    color: #000000;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.terminal-button.disabled {
+    background-color: #555555;
+    cursor: not-allowed;
+}

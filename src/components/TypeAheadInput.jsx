@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import searchActions from '../utils/fuzzySearch';
 import { SendCrypto, Donate, Vrf } from './ActionComp';
 import { TextInput, Button } from './commonComp';
+import TerminalInput from './TerminalComp/TerminalInput';
 import ProgressComponent from './Progress/ProgressComponent';
+import Terminal, { ColorMode, TerminalOutput } from 'react-terminal-ui';
+
 
 const TypeAheadInput = () => {
     const [input, setInput] = useState('');
@@ -29,6 +32,7 @@ const TypeAheadInput = () => {
     };
 
     const handleSelect = (action) => {
+        console.log('action-------------->', action);
         setSelectedAction(action);
         setSuggestions([]);
         setShowProgress(false);
@@ -68,42 +72,31 @@ const TypeAheadInput = () => {
 
 
 
-
-    useEffect(() => {
-        console.log('input-------------->', input);
-    }, [input]);
-
-
     const SelectedComponent = selectedAction ? actionComponents[selectedAction.name] : null;
 
 
+
+
     return (
-        <div>
+        <div className="text-white min-h-screen p-8">
             {SelectedComponent ? (
                 <div className='flex flex-col items-center gap-5'>
-                    {/* Reset Button to clear suggestions and reset input */}
                     <div className='flex flex-row items-center gap-5'>
                         {!showProgress &&
-                        <Button onClick={handleReset} className='' label="Reset"/>
+                            <Button onClick={handleReset} className='bg-gray-700 text-white' label="Reset" />
                         }
-                        {/* Render the selected action component */}
                         <SelectedComponent setInput={setInput} handleConfirm={handleConfirm} showProgress={showProgress} />
                     </div>
                     {showProgress && <ProgressComponent steps={progressSteps} showProgress={showProgress} handleReset={handleReset} />}
                 </div>
-            ) : (
-                <div>
-                    <TextInput type="text" value={input} onChange={handleChange} placeholder="Start typing your task..." />
-                    {suggestions.length > 0 && (
-                        <ul>
-                            {suggestions.map(action => (
-                                <li key={action.id} onClick={() => handleSelect(action)} className='hover:bg-gray-100 cursor-pointer'>
-                                    {action.name} - {action.description}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
+            ) : (            
+                <TerminalInput
+                    value={input}
+                    onChange={handleChange}
+                    placeholder="Start typing your task..."
+                    suggestions={suggestions}
+                    onSuggestionSelect={handleSelect}
+                />
             )}
         </div>
     );
