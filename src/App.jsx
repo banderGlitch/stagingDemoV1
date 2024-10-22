@@ -89,7 +89,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('chains');
   const [activeMainTab, setActiveMainTab] = useState('intent');
   const themeOptions = ['light', 'dark', 'custom'];
-
+// comment
   const handleThemeChange = (event) => {
     setTheme(event.target.value);
   };
