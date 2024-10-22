@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '../commonComp';
+import { Button } from '../components/commonComp';
 const Vrf = () => {
     const handleVrf = () => {
         console.log('Generating Random Number...');

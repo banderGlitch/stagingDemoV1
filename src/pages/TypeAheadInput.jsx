@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import searchActions from '../utils/fuzzySearch';
-import { SendCrypto, Donate, Vrf } from './ActionComp';
-import { TextInput, Button } from './commonComp';
-import TerminalInput from './TerminalComp/TerminalInput';
-import ProgressComponent from './Progress/ProgressComponent';
+import { SendCrypto, Donate, Vrf } from '../pages';
+import { TextInput, Button } from '../components/commonComp';
+import TerminalInput from '../components/TerminalComp/TerminalInput';
+import ProgressComponent from '../components/Progress/ProgressComponent';
 import Terminal, { ColorMode, TerminalOutput } from 'react-terminal-ui';
 
 
@@ -57,7 +57,7 @@ const TypeAheadInput = ({ theme }) => {
     const handleConfirm = () => {
         console.log("Confirmed transaction:", input);
         // Add your confirmation logic here
-        
+
 
         const steps = [
             'Placing your order in solver ecosystem...',
@@ -113,28 +113,6 @@ const TypeAheadInput = ({ theme }) => {
             )}
         </div>
     ); 
-    //     <div className={`text-white min-h-screen p-8 ${theme}`}>
-    //         {SelectedComponent ? (
-    //             <div className='flex flex-col items-center gap-5'>
-    //                 <div className='flex flex-row items-center gap-5'>
-    //                     {!showProgress &&
-    //                         <Button onClick={handleReset} className='bg-gray-700 text-white' label="Reset" />
-    //                     }
-    //                     <SelectedComponent setInput={setInput} handleConfirm={handleConfirm} showProgress={showProgress} />
-    //                 </div>
-    //                 {showProgress && <ProgressComponent steps={progressSteps} showProgress={showProgress} handleReset={handleReset} />}
-    //             </div>
-    //         ) : (            
-    //             <TerminalInput
-    //                 value={input}
-    //                 onChange={handleChange}
-    //                 placeholder="Start typing your task..."
-    //                 suggestions={suggestions}
-    //                 onSuggestionSelect={handleSelect}
-    //             />
-    //         )}
-    //     </div>
-    // );
 };
 
 export default TypeAheadInput;

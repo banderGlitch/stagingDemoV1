@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {ReadOnlyTransaction}  from './SendDonateComp';
-import { TransactionForm } from '../SuperCommonComp';
+import {ReadOnlyTransaction}  from '../components/ActionComp/SendDonateComp';
+import { TransactionForm } from '../components/SuperCommonComp';
 const Donate = ({ setInput , handleConfirm ,  showProgress}) => {
 
     const cryptoOptions = ['ETH', 'BTC', 'USDT', 'USDC', 'DAI'];

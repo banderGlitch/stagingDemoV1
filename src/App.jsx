@@ -1,22 +1,16 @@
-
 import { ethers, JsonRpcProvider } from 'ethers'
 import { useState, useEffect } from 'react'
-import TypeAheadInput from './components/TypeAheadInput'
 import ConnectButton from './utils/connectButton'
 import { getERC20TransferEvents, getTokenBalances } from './getAllTokens.js'
 import { useAccount, useBalance, usePublicClient, useWalletClient, useDisconnect } from 'wagmi';
 import { tokensNetworks } from './constant'
-import { IoLogOutOutline } from "react-icons/io5";
-import { TiTickOutline } from "react-icons/ti";
-import { BsCircleHalf } from "react-icons/bs"
-import { IoIosRefresh } from "react-icons/io";
-import { FaLink, FaWallet, FaChartLine, FaCog, FaCopy, FaChevronDown, FaChevronUp, FaChevronRight, FaCheck, FaDotCircle } from 'react-icons/fa';
-
-import { VscCollapseAll } from "react-icons/vsc";
+import { IconComponent } from './utils/Icons'  // Import the Icons component
+import { MainPage } from './pages';
 import { Dropdown } from './components/commonComp'
-import Web3 from 'web3';
 import './theme.css'
-import { FaSpinner } from 'react-icons/fa';
+
+
+
 function App() {
 
   const { address, isConnected, connector, chain } = useAccount();
@@ -133,10 +127,10 @@ function App() {
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       <header className='w-full p-3'>
-        <div className='flex justify-between'>
+        <div className='flex justify-between items-center'>
           <p>header</p>
           <div className='flex items-center gap-4'>
-            {isConnected && <IoLogOutOutline size={20} onClick={disconnect} />}
+            {isConnected && <IconComponent name="LogOut" size={20} onClick={disconnect} />}
             <Dropdown
               className='bg-black'
               options={themeOptions}
@@ -149,7 +143,6 @@ function App() {
       <main className='flex-1 overflow-hidden'>
         <div className={`flex flex-col md:flex-row h-full  ${theme}`}>
           <div className="w-full md:w-1/4 p-4 bg-sidebar text-sidebar-text overflow-y-auto ">
-            {/* Tab Navigation */}
             <div className="flex justify-center mb-3">
               {['chains', 'wallet', 'defi', 'actions'].map((tab) => (
                 <button
@@ -212,7 +205,7 @@ const IntentTab = ({ theme }) => {
   return (
     <div>
       <h2 className="text-xl text-center font-bold mt-10">What do you want to do?</h2>
-      <TypeAheadInput theme={theme} />
+      <MainPage theme={theme} />
       {/* Add intent-related content here */}
     </div>
   );
@@ -303,10 +296,6 @@ const WalletTab = ({ allAccountBalances }) => {
     });
   };
 
-  // const collapseAll = () => {
-  //   setExpandedAddresses({});
-  //   setExpandedNetworks({});
-  // };
 
   const formatAddress = (address) => {
     if (address.length <= 8) return address;
@@ -314,29 +303,6 @@ const WalletTab = ({ allAccountBalances }) => {
   };
 
 
-
-  // const toggleAllExpansion = () => {
-  //   if (Object.keys(expandedAddresses).length === 0 && Object.keys(expandedNetworks).length === 0) {
-  //     // Expand all
-  //     const allAddressesExpanded = Object.keys(formattedBalances).reduce((acc, address) => {
-  //       acc[address] = true;
-  //       return acc;
-  //     }, {});
-  //     setExpandedAddresses(allAddressesExpanded);
-
-  //     const allNetworksExpanded = Object.entries(formattedBalances).reduce((acc, [address, networks]) => {
-  //       networks.forEach((_, index) => {
-  //         acc[`${address}-${index}`] = true;
-  //       });
-  //       return acc;
-  //     }, {});
-  //     setExpandedNetworks(allNetworksExpanded);
-  //   } else {
-  //     // Collapse all
-  //     setExpandedAddresses({});
-  //     setExpandedNetworks({});
-  //   }
-  // };
 
 
   const toggleAllExpansion = () => {
@@ -365,7 +331,7 @@ const WalletTab = ({ allAccountBalances }) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-full">
-        <FaSpinner className="animate-spin text-4xl text-button" />
+        <IconComponent name="Spinner" size={48} className="animate-spin text-button" />
       </div>
     );
   }
@@ -375,14 +341,14 @@ const WalletTab = ({ allAccountBalances }) => {
   return (
     <div>
       <div className="flex items-center gap-3 mb-1">
-        <VscCollapseAll size={15} onClick={toggleAllExpansion} />
-        <IoIosRefresh size={13} onClick={refreshBalances} />
+        <IconComponent name="CollapseAll" size={15} onClick={toggleAllExpansion} />
+        <IconComponent name="Refresh" size={13} onClick={refreshBalances} />
       </div>
       {Object.entries(formattedBalances).map(([account, networks]) => (
         <div key={account} className="mb-4 p-2 bg-sidebar-alt rounded-lg">
           <div className='flex cursor-pointer items-center gap-2 justify-between' onClick={() => toggleAddressExpansion(account)}>
             <div className='flex items-center gap-2'>
-              {expandedAddresses[account] || isAllExpanded ? <FaChevronDown size={10} /> : <FaChevronRight size={10} />}
+              {expandedAddresses[account] || isAllExpanded ? <IconComponent name="ChevronDown" size={10} /> : <IconComponent name="ChevronRight" size={10} />}
               <h4 className="font-medium text-sm">{formatAddress(account)}</h4>
               <button
                 onClick={(e) => {
@@ -392,11 +358,11 @@ const WalletTab = ({ allAccountBalances }) => {
                 className="text-xs text-button hover:text-button-hover focus:outline-none ml-2"
                 title="Copy address"
               >
-                {copiedAddress === account ? <TiTickOutline /> : <FaCopy />}
+                {copiedAddress === account ? <IconComponent name="Tick" size={10} /> : <IconComponent name="Copy" size={10} />}
               </button>
             </div>
             {account.toLowerCase() === connectedAddress?.toLowerCase() && (
-              <FaDotCircle className="text-green-500" size={10} title="Connected Address" />
+              <IconComponent name="DotCircle" className="text-green-500" size={10} title="Connected Address" />
             )}
           </div>
 
@@ -408,7 +374,7 @@ const WalletTab = ({ allAccountBalances }) => {
                     className="flex cursor-pointer items-center gap-2"
                     onClick={() => toggleNetworkExpansion(account, index)}
                   >
-                    {expandedNetworks[`${account}-${index}`] ? <FaChevronDown size={10} /> : <FaChevronRight size={10} />}
+                    {expandedNetworks[`${account}-${index}`] ? <IconComponent name="ChevronDown" size={10} /> : <IconComponent name="ChevronRight" size={10} />}
                     <span className="text-xs text-gray-500">{network.network} ({network.chainId})</span>
                   </div>
                   {expandedNetworks[`${account}-${index}`] && (
@@ -486,10 +452,10 @@ const Connect = ({ theme }) => {
 
   return (
     <div className={`flex flex-col items-center bg-sidebar text-sidebar-text rounded-md ${theme}`}>
-      <div className='flex items-center px-3'>
-      <FaWallet className="" />
+      <div className='flex flex-start items-center px-3'>
+        <IconComponent name="Wallet" size={10} />
         <button
-          className="flex items-center px-3 py-1 hover:bg-sidebar-alt transition-colors"
+          className="flex item-start px-3 py-1 hover:bg-sidebar-alt transition-colors"
         >
           <span className="mr-2 text-xs">{shortenAddress(address)}</span>
         </button>
