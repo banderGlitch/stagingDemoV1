@@ -281,7 +281,7 @@ const WalletTab = ({ allAccountBalances }) => {
       setTimeout(() => setCopiedAddress(null), 2000);
     });
   };
-
+//coment
   const toggleAddressExpansion = (address) => {
     setExpandedAddresses(prev => ({
       ...prev,
