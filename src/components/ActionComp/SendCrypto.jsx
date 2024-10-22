@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TransactionForm } from '../SuperCommonComp';
 import {ReadOnlyTransaction }  from './SendDonateComp';
-const SendCrypto = ({ setInput , handleConfirm , showProgress }) => {
+const SendCrypto = ({ setInput , handleConfirm , showProgress , theme }) => {
 
     const cryptoOptions = ['ETH', 'BTC', 'USDT', 'USDC', 'DAI'];
 
@@ -35,7 +35,7 @@ const SendCrypto = ({ setInput , handleConfirm , showProgress }) => {
 
     return (
 
-        <div>
+        <div  className={`bg-main text-main-text ${theme}`}>
             {isEditable ? (
                 // Editable TransactionForm
                 <TransactionForm
@@ -49,6 +49,7 @@ const SendCrypto = ({ setInput , handleConfirm , showProgress }) => {
                     setAmount={setAmount}
                     setCrypto={setCrypto}
                     setWalletAddress={setWalletAddress}
+                    theme={theme}
                     onLetsGo={handleLetsGo} // Callback when "Let's Go" is clicked
                 />
             ) : (
@@ -60,6 +61,7 @@ const SendCrypto = ({ setInput , handleConfirm , showProgress }) => {
                     onConfirm={handleConfirm}
                     onEdit={handleEdit}
                     showProgress={showProgress}
+                    theme={theme}
                 />
             )}
         </div>

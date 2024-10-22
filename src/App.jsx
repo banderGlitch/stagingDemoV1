@@ -9,9 +9,11 @@ import { tokensNetworks } from './constant'
 import { IoLogOutOutline } from "react-icons/io5";
 import { TiTickOutline } from "react-icons/ti";
 import { BsCircleHalf } from "react-icons/bs"
-import { FaLink, FaWallet, FaChartLine, FaCog, FaCopy, FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { DropdownTheme } from './components/Design'
-import { Dropdown } from './components/Common'
+import { IoIosRefresh } from "react-icons/io";
+import { FaLink, FaWallet, FaChartLine, FaCog, FaCopy, FaChevronDown, FaChevronUp, FaChevronRight, FaCheck, FaDotCircle } from 'react-icons/fa';
+
+import { VscCollapseAll } from "react-icons/vsc";
+import { Dropdown } from './components/commonComp'
 import Web3 from 'web3';
 import './theme.css'
 import { FaSpinner } from 'react-icons/fa';
@@ -89,7 +91,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('chains');
   const [activeMainTab, setActiveMainTab] = useState('intent');
   const themeOptions = ['light', 'dark', 'custom'];
-// comment
+  // comment
   const handleThemeChange = (event) => {
     setTheme(event.target.value);
   };
@@ -167,20 +169,25 @@ function App() {
             </div>
           </div>
           <div className="w-full md:w-3/4 p-4 bg-main text-main-text overflow-y-auto">
-            {/* Add your main content here */}
-            <div className="flex justify-center">
-              {['intent', 'history'].map((tab) => (
-                <button
-                  key={tab}
-                  className={`mx-4 py-2 px-1 text-sm font-medium transition-all duration-200 ease-in-out
-                    ${activeMainTab === tab
-                      ? 'text-button border-b-2 border-button'
-                      : 'text-main-text hover:text-button'}`}
-                  onClick={() => setActiveMainTab(tab)}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-              ))}
+            <div className="flex justify-between items-center w-full">
+              <div className="flex-shrink-0">
+                <Connect theme={theme} />
+              </div>
+              <div className="flex justify-center flex-grow">
+                {['intent', 'history'].map((tab) => (
+                  <button
+                    key={tab}
+                    className={`mx-4 py-2 px-1 text-sm font-medium transition-all duration-200 ease-in-out
+                     ${activeMainTab === tab
+                        ? 'text-button border-b-2 border-button'
+                        : 'text-main-text hover:text-button'}`}
+                    onClick={() => setActiveMainTab(tab)}
+                  >
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </button>
+                ))}
+              </div>
+              <div className="flex-shrink-0 w-[100px]"></div> {/* Spacer to balance the layout */}
             </div>
 
             {/* Main Tab Content */}
@@ -201,7 +208,7 @@ function App() {
 export default App
 
 // Main Tab Content
-const IntentTab = ({theme}) => {
+const IntentTab = ({ theme }) => {
   return (
     <div>
       <h2 className="text-xl text-center font-bold mt-10">What do you want to do?</h2>
@@ -239,11 +246,15 @@ const ChainsTab = () => {
 
 
 const WalletTab = ({ allAccountBalances }) => {
-
   const [isLoading, setIsLoading] = useState(true);
   const [formattedBalances, setFormattedBalances] = useState([]);
   const [copiedAddress, setCopiedAddress] = useState(null);
-  const [expandedAddresses, setExpandedAddresses] = useState({})
+  const [expandedAddresses, setExpandedAddresses] = useState({});
+  const [expandedNetworks, setExpandedNetworks] = useState({});
+  const [isAllExpanded, setIsAllExpanded] = useState(false);
+  const { address: connectedAddress } = useAccount()
+
+
   useEffect(() => {
     if (allAccountBalances && allAccountBalances.length > 0) {
       const formatted = allAccountBalances.reduce((acc, accountArray) => {
@@ -270,9 +281,19 @@ const WalletTab = ({ allAccountBalances }) => {
   }, [allAccountBalances]);
 
 
-  const formatAddress = (address) => {
-    if (address.length <= 8) return address;
-    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+
+  const toggleAddressExpansion = (address) => {
+    setExpandedAddresses(prev => ({
+      ...prev,
+      [address]: !prev[address]
+    }));
+  };
+
+  const toggleNetworkExpansion = (address, networkIndex) => {
+    setExpandedNetworks(prev => ({
+      ...prev,
+      [`${address}-${networkIndex}`]: !prev[`${address}-${networkIndex}`]
+    }));
   };
 
   const copyToClipboard = (address) => {
@@ -281,13 +302,65 @@ const WalletTab = ({ allAccountBalances }) => {
       setTimeout(() => setCopiedAddress(null), 2000);
     });
   };
-//coment
-  const toggleAddressExpansion = (address) => {
-    setExpandedAddresses(prev => ({
-      ...prev,
-      [address]: !prev[address]
-    }));
+
+  // const collapseAll = () => {
+  //   setExpandedAddresses({});
+  //   setExpandedNetworks({});
+  // };
+
+  const formatAddress = (address) => {
+    if (address.length <= 8) return address;
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
+
+
+
+  // const toggleAllExpansion = () => {
+  //   if (Object.keys(expandedAddresses).length === 0 && Object.keys(expandedNetworks).length === 0) {
+  //     // Expand all
+  //     const allAddressesExpanded = Object.keys(formattedBalances).reduce((acc, address) => {
+  //       acc[address] = true;
+  //       return acc;
+  //     }, {});
+  //     setExpandedAddresses(allAddressesExpanded);
+
+  //     const allNetworksExpanded = Object.entries(formattedBalances).reduce((acc, [address, networks]) => {
+  //       networks.forEach((_, index) => {
+  //         acc[`${address}-${index}`] = true;
+  //       });
+  //       return acc;
+  //     }, {});
+  //     setExpandedNetworks(allNetworksExpanded);
+  //   } else {
+  //     // Collapse all
+  //     setExpandedAddresses({});
+  //     setExpandedNetworks({});
+  //   }
+  // };
+
+
+  const toggleAllExpansion = () => {
+    setIsAllExpanded(!isAllExpanded);
+
+    if (!isAllExpanded) {
+      // Expand all
+      const allExpanded = Object.keys(formattedBalances).reduce((acc, address) => {
+        acc[address] = true;
+        return acc;
+      }, {});
+      setExpandedAddresses(allExpanded);
+    } else {
+      // Collapse all
+      setExpandedAddresses({});
+    }
+  };
+
+  const refreshBalances = async () => {
+    // await getAccount()
+  }
+
+
+
 
   if (isLoading) {
     return (
@@ -297,48 +370,63 @@ const WalletTab = ({ allAccountBalances }) => {
     );
   }
 
+
+
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-4">Wallet Balances</h3>
+      <div className="flex items-center gap-3 mb-1">
+        <VscCollapseAll size={15} onClick={toggleAllExpansion} />
+        <IoIosRefresh size={13} onClick={refreshBalances} />
+      </div>
       {Object.entries(formattedBalances).map(([account, networks]) => (
         <div key={account} className="mb-4 p-2 bg-sidebar-alt rounded-lg">
-          <div className='flex justify-between items-center cursor-pointer' onClick={() => toggleAddressExpansion(account)}>
-            <h4 className="font-medium text-sm">{formatAddress(account)}</h4>
-            <div className="flex items-center">
+          <div className='flex cursor-pointer items-center gap-2 justify-between' onClick={() => toggleAddressExpansion(account)}>
+            <div className='flex items-center gap-2'>
+              {expandedAddresses[account] || isAllExpanded ? <FaChevronDown size={10} /> : <FaChevronRight size={10} />}
+              <h4 className="font-medium text-sm">{formatAddress(account)}</h4>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   copyToClipboard(account);
                 }}
-                className="text-xs text-button hover:text-button-hover focus:outline-none mr-2"
+                className="text-xs text-button hover:text-button-hover focus:outline-none ml-2"
                 title="Copy address"
               >
                 {copiedAddress === account ? <TiTickOutline /> : <FaCopy />}
               </button>
-              {expandedAddresses[account] ? <FaChevronUp /> : <FaChevronDown />}
             </div>
+            {account.toLowerCase() === connectedAddress?.toLowerCase() && (
+              <FaDotCircle className="text-green-500" size={10} title="Connected Address" />
+            )}
           </div>
+
           {expandedAddresses[account] && (
-            <div className="mt-2">
+            <div className="mt-2 ml-4">
               {networks.map((network, index) => (
-                <div key={index} className="mb-4 last:mb-0 pl-2 border-l-2 border-sidebar-text">
-                  <div className="flex flex-col items-left mb-2">
+                <div key={index} className="mb-4 last:mb-0">
+                  <div
+                    className="flex cursor-pointer items-center gap-2"
+                    onClick={() => toggleNetworkExpansion(account, index)}
+                  >
+                    {expandedNetworks[`${account}-${index}`] ? <FaChevronDown size={10} /> : <FaChevronRight size={10} />}
                     <span className="text-xs text-gray-500">{network.network} ({network.chainId})</span>
-                    <div className='flex justify-between text-xs'>
-                      <span>{network.symbol}</span>
-                      <span>{parseFloat(parseFloat(network?.nativeBalance).toFixed(6))}</span>
-                    </div>
                   </div>
-                  {network.tokens.length > 0 && (
-                    <div>
-                      <ul className="space-y-1">
-                        {network.tokens.map((token, tokenIndex) => (
-                          <li key={tokenIndex} className="flex justify-between text-xs">
-                            <span>{token.symbol}</span>
-                            <span>{parseFloat(parseFloat(token.balance).toFixed(6))}</span>
-                          </li>
-                        ))}
-                      </ul>
+                  {expandedNetworks[`${account}-${index}`] && (
+                    <div className="ml-4 mt-1">
+                      <div className='flex justify-between text-xs'>
+                        <span>{network.symbol}</span>
+                        <span>{parseFloat(parseFloat(network?.nativeBalance).toFixed(6))}</span>
+                      </div>
+                      {network.tokens.length > 0 && (
+                        <ul className="space-y-1 mt-1">
+                          {network.tokens.map((token, tokenIndex) => (
+                            <li key={tokenIndex} className="flex justify-between text-xs">
+                              <span>{token.symbol}</span>
+                              <span>{parseFloat(parseFloat(token.balance).toFixed(6))}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   )}
                 </div>
@@ -353,106 +441,7 @@ const WalletTab = ({ allAccountBalances }) => {
 
 
 
-// const WalletTab = ({ allAccountBalances }) => {
 
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [formattedBalances, setFormattedBalances] = useState([]);
-//   const [copiedAddress, setCopiedAddress] = useState(null);
-//   useEffect(() => {
-//     if (allAccountBalances && allAccountBalances.length > 0) {
-//       const formatted = allAccountBalances.reduce((acc, accountArray) => {
-//         accountArray.forEach(account => {
-//           if (!acc[account.account]) {
-//             acc[account.account] = [];
-//           }
-//           acc[account.account].push({
-//             network: account.network,
-//             chainId: account.chainId,
-//             symbol: account.symbol,
-//             nativeBalance: ethers.formatEther(account.nativeBalances),
-//             tokens: account.balances.map(token => ({
-//               symbol: token.symbol,
-//               balance: token.balance
-//             }))
-//           });
-//         });
-//         return acc;
-//       }, {});
-//       setFormattedBalances(formatted);
-//       setIsLoading(false);
-//     }
-//   }, [allAccountBalances]);
-
-
-//   const formatAddress = (address) => {
-//     if (address.length <= 8) return address;
-//     return `${address.slice(0, 6)}...${address.slice(-4)}`;
-//   };
-
-//   const copyToClipboard = (address) => {
-//     navigator.clipboard.writeText(address).then(() => {
-//       setCopiedAddress(address);
-//       setTimeout(() => setCopiedAddress(null), 2000); // Reset after 2 seconds
-//     });
-//   };
-
-
-
-
-//   if (isLoading) {
-//     return (
-//       <div className="flex justify-center items-center h-full">
-//         <FaSpinner className="animate-spin text-4xl text-button" />
-//       </div>
-//     );
-//   }
-
-
-//   return (
-//     <div>
-//       <h3 className="text-lg font-semibold mb-4">Wallet Balances</h3>
-//       {Object.entries(formattedBalances).map(([account, networks]) => (
-//         <div key={account} className="mb-4 p-1 bg-sidebar-alt">
-//           <div className='flex justify-between'>
-//           <h4 className="font-medium text-sm mb-2">{formatAddress(account)}</h4>
-//           <button
-//             onClick={() => copyToClipboard(account)}
-//             className="text-xs text-button hover:text-button-hover focus:outline-none"
-//             title="Copy address"
-//           >
-//             {copiedAddress === account ? <TiTickOutline /> : <FaCopy />}
-//           </button>
-//         </div>
-//           {networks.map((network, index) => (
-//             <div key={index} className="mb-4 last:mb-0">
-//               <div className="flex flex-col  items-left mb-2">
-//                 <span className="text-xs text-gray-500">{network.network} ({network.chainId})</span>
-//                 <span className="text-xs">
-//                   <div className='flex justify-between text-xs'>
-//                     <span>{network.symbol}</span>
-//                     <span>{parseFloat(parseFloat(network?.nativeBalance).toFixed(6))}</span>
-//                   </div>
-//                 </span>
-//               </div>
-//               {network.tokens.length > 0 && (
-//                 <div>
-//                   <ul className="space-y-1">
-//                     {network.tokens.map((token, tokenIndex) => (
-//                       <li key={tokenIndex} className="flex justify-between text-xs">
-//                         <span>{token.symbol}</span>
-//                         <span>{parseFloat(parseFloat(token.balance).toFixed(6))}</span>
-//                       </li>
-//                     ))}
-//                   </ul>
-//                 </div>
-//               )}
-//             </div>
-//           ))}
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
 
 
 
@@ -475,6 +464,42 @@ const ActionsTab = () => {
     </div>
   );
 };
+
+
+// connect wallet button 
+
+const Connect = ({ theme }) => {
+
+  const { address, isConnected } = useAccount();
+  const { data: balance } = useBalance({ address });
+  const { chain } = useAccount();
+  console.log("balance------------------------->", balance)
+  console.log("chain------------------------->", chain)
+
+
+  if (!isConnected) {
+    return null
+  }
+
+
+  const shortenAddress = (addr) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+
+  return (
+    <div className={`flex flex-col items-center bg-sidebar text-sidebar-text rounded-md ${theme}`}>
+      <div className='flex items-center px-3'>
+      <FaWallet className="" />
+        <button
+          className="flex items-center px-3 py-1 hover:bg-sidebar-alt transition-colors"
+        >
+          <span className="mr-2 text-xs">{shortenAddress(address)}</span>
+        </button>
+      </div>
+      <div className="flex  px-3 py-1">
+        <span className='text-xs'>{balance?.formatted.slice(0, 6)} {balance?.symbol}</span>
+      </div>
+    </div>
+  )
+}
 
 
 

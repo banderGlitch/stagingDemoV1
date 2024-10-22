@@ -1,18 +1,87 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-const Dropdown = ({options, value, onChange }) => {
+const Dropdown = ({ options, value, onChange, className, theme }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div>
-            {/* <label>{label}</label> */}
-            <select value={value} onChange={onChange}>
-                {options.map((option, index) => (
-                    <option key={index} value={option}>
-                        {option}
-                    </option>
-                ))}
-            </select>
+        <div ref={dropdownRef} className={`relative ${theme}`}>
+            <div
+                className={`bg-input text-input-text cursor-pointer p-2 ${className}`}
+                onClick={() => setIsOpen(!isOpen)}
+            >
+                {value}
+            </div>
+            {isOpen && (
+                <ul className="absolute z-10 w-full mt-1 bg-input text-input-text shadow-lg">
+                    {options.map((option, index) => (
+                        <li
+                            key={index}
+                            className="cursor-pointer p-2 hover:bg-sidebar-alt"
+                            onClick={() => {
+                                onChange({ target: { value: option } });
+                                setIsOpen(false);
+                            }}
+                        >
+                            {option}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };
 
 export default Dropdown;
+// import React from 'react';
+
+// const Dropdown = ({ options, value, onChange, className, theme }) => {
+//     return (
+//         <div className={`${theme}`}>
+//             <select 
+//                 value={value} 
+//                 onChange={onChange}
+//                 className={`bg-input text-input-text ${className}`}
+//             >
+//                 {options.map((option, index) => (
+//                     <option key={index} value={option} className="bg-input text-input-text">
+//                         {option}
+//                     </option>
+//                 ))}
+//             </select>
+//         </div>
+//     );
+// };
+
+// export default Dropdown;
+
+// import React from 'react';
+
+// const Dropdown = ({options, value, onChange , theme }) => {
+//     return (
+//         <div className={`${theme}`}>
+//             <select value={value} onChange={onChange}>
+//                 {options.map((option, index) => (
+//                     <option key={index} value={option}>
+//                         {option}
+//                     </option>
+//                 ))}
+//             </select>
+//         </div>
+//     );
+// };
+
+// export default Dropdown;

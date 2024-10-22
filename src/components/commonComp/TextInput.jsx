@@ -6,7 +6,7 @@ const TextInput = ({ value, onChange, placeholder, className, onFocus, onBlur, r
             <input
                 type="text"
                 value={value}
-                className={className}
+                className={`bg-input text-input-text ${className}`}
                 onChange={onChange}
                 placeholder={placeholder}
                 onFocus={onFocus}

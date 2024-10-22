@@ -57,6 +57,7 @@ const TypeAheadInput = ({ theme }) => {
     const handleConfirm = () => {
         console.log("Confirmed transaction:", input);
         // Add your confirmation logic here
+        
 
         const steps = [
             'Placing your order in solver ecosystem...',
@@ -90,6 +91,7 @@ const TypeAheadInput = ({ theme }) => {
                             setInput={setInput} 
                             handleConfirm={handleConfirm} 
                             showProgress={showProgress} 
+                            theme={theme}
                         />
                     </div>
                     {showProgress && (
@@ -110,51 +112,7 @@ const TypeAheadInput = ({ theme }) => {
                 />
             )}
         </div>
-    );
-
-    // return (
-    //     <div className={`min-h-screen p-8`}>
-    //         {SelectedComponent ? (
-    //             <div className='flex flex-col items-center gap-5'>
-    //                 <div className='flex flex-row items-center gap-5'>
-    //                     {!showProgress && (
-    //                         <Button
-    //                             onClick={handleReset}
-    //                             className={`${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-800'} hover:opacity-80`}
-    //                             label="Reset"
-    //                         />
-    //                     )}
-    //                     <SelectedComponent
-    //                         setInput={setInput}
-    //                         handleConfirm={handleConfirm}
-    //                         showProgress={showProgress}
-    //                         theme={theme}
-    //                     />
-    //                 </div>
-    //                 {showProgress && (
-    //                     <ProgressComponent
-    //                         steps={progressSteps}
-    //                         showProgress={showProgress}
-    //                         handleReset={handleReset}
-    //                         theme={theme}
-    //                     />
-    //                 )}
-    //             </div>
-    //         ) : (
-    //             <TerminalInput
-    //                 value={input}
-    //                 onChange={handleChange}
-    //                 placeholder="Start typing your task..."
-    //                 suggestions={suggestions}
-    //                 onSuggestionSelect={handleSelect}
-    //                 theme={theme}
-    //             />
-    //         )}
-    //     </div>
-    // );
-
-
-    // return (
+    ); 
     //     <div className={`text-white min-h-screen p-8 ${theme}`}>
     //         {SelectedComponent ? (
     //             <div className='flex flex-col items-center gap-5'>

@@ -8,3 +8,21 @@ body {
     color: white;
     position: relative;
 }
+
+:root {
+    --color-input-bg: /* your input background color */;
+    --color-input-text: /* your input text color */;
+  }
+  
+  .bg-input {
+    background-color: var(--color-input-bg);
+  }
+  
+  .text-input-text {
+    color: var(--color-input-text);
+  }
+
+  select.bg-input option {
+    background-color: var(--color-input-bg);
+    color: var(--color-input-text);
+}
