@@ -12,6 +12,7 @@ export const tokensNetworks = [
         type:'testnet',
         name : "Rootstock Testnet",
         currencySymbol : "tRBTC",
+        chainLogoUrl:"https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/blockchains/rootstock/info/logo.png"
     },
 ]
 

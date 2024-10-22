@@ -7,7 +7,7 @@ import ProgressComponent from './Progress/ProgressComponent';
 import Terminal, { ColorMode, TerminalOutput } from 'react-terminal-ui';
 
 
-const TypeAheadInput = () => {
+const TypeAheadInput = ({ theme }) => {
     const [input, setInput] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [selectedAction, setSelectedAction] = useState(null);
@@ -74,20 +74,31 @@ const TypeAheadInput = () => {
 
     const SelectedComponent = selectedAction ? actionComponents[selectedAction.name] : null;
 
-
-
-
     return (
-        <div className="text-white min-h-screen p-8">
+        <div className={`min-h-screen p-8 bg-main text-main-text ${theme}`}>
             {SelectedComponent ? (
                 <div className='flex flex-col items-center gap-5'>
                     <div className='flex flex-row items-center gap-5'>
-                        {!showProgress &&
-                            <Button onClick={handleReset} className='bg-gray-700 text-white' label="Reset" />
-                        }
-                        <SelectedComponent setInput={setInput} handleConfirm={handleConfirm} showProgress={showProgress} />
+                        {!showProgress && (
+                            <Button 
+                                onClick={handleReset} 
+                                className="bg-button text-button-text hover:opacity-80" 
+                                label="Reset" 
+                            />
+                        )}
+                        <SelectedComponent 
+                            setInput={setInput} 
+                            handleConfirm={handleConfirm} 
+                            showProgress={showProgress} 
+                        />
                     </div>
-                    {showProgress && <ProgressComponent steps={progressSteps} showProgress={showProgress} handleReset={handleReset} />}
+                    {showProgress && (
+                        <ProgressComponent 
+                            steps={progressSteps} 
+                            showProgress={showProgress} 
+                            handleReset={handleReset}
+                        />
+                    )}
                 </div>
             ) : (            
                 <TerminalInput
@@ -100,6 +111,72 @@ const TypeAheadInput = () => {
             )}
         </div>
     );
+
+    // return (
+    //     <div className={`min-h-screen p-8`}>
+    //         {SelectedComponent ? (
+    //             <div className='flex flex-col items-center gap-5'>
+    //                 <div className='flex flex-row items-center gap-5'>
+    //                     {!showProgress && (
+    //                         <Button
+    //                             onClick={handleReset}
+    //                             className={`${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-800'} hover:opacity-80`}
+    //                             label="Reset"
+    //                         />
+    //                     )}
+    //                     <SelectedComponent
+    //                         setInput={setInput}
+    //                         handleConfirm={handleConfirm}
+    //                         showProgress={showProgress}
+    //                         theme={theme}
+    //                     />
+    //                 </div>
+    //                 {showProgress && (
+    //                     <ProgressComponent
+    //                         steps={progressSteps}
+    //                         showProgress={showProgress}
+    //                         handleReset={handleReset}
+    //                         theme={theme}
+    //                     />
+    //                 )}
+    //             </div>
+    //         ) : (
+    //             <TerminalInput
+    //                 value={input}
+    //                 onChange={handleChange}
+    //                 placeholder="Start typing your task..."
+    //                 suggestions={suggestions}
+    //                 onSuggestionSelect={handleSelect}
+    //                 theme={theme}
+    //             />
+    //         )}
+    //     </div>
+    // );
+
+
+    // return (
+    //     <div className={`text-white min-h-screen p-8 ${theme}`}>
+    //         {SelectedComponent ? (
+    //             <div className='flex flex-col items-center gap-5'>
+    //                 <div className='flex flex-row items-center gap-5'>
+    //                     {!showProgress &&
+    //                         <Button onClick={handleReset} className='bg-gray-700 text-white' label="Reset" />
+    //                     }
+    //                     <SelectedComponent setInput={setInput} handleConfirm={handleConfirm} showProgress={showProgress} />
+    //                 </div>
+    //                 {showProgress && <ProgressComponent steps={progressSteps} showProgress={showProgress} handleReset={handleReset} />}
+    //             </div>
+    //         ) : (            
+    //             <TerminalInput
+    //                 value={input}
+    //                 onChange={handleChange}
+    //                 placeholder="Start typing your task..."
+    //                 suggestions={suggestions}
+    //                 onSuggestionSelect={handleSelect}
+    //             />
+    //         )}
+    //     </div>
+    // );
 };
 
 export default TypeAheadInput;
