@@ -26,3 +26,9 @@ body {
     background-color: var(--color-input-bg);
     color: var(--color-input-text);
 }
+
+
+.dropdown-menu {
+    background-color: #1f2937; /* A dark gray color that matches your theme */
+    color: white;
+  }

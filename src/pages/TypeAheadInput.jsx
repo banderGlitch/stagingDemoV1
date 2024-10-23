@@ -4,6 +4,7 @@ import { SendCrypto, Donate, Vrf } from '../pages';
 import { TextInput, Button } from '../components/commonComp';
 import TerminalInput from '../components/TerminalComp/TerminalInput';
 import ProgressComponent from '../components/Progress/ProgressComponent';
+import  useAxios  from '../utils/useAxios';
 import Terminal, { ColorMode, TerminalOutput } from 'react-terminal-ui';
 
 
@@ -13,6 +14,15 @@ const TypeAheadInput = ({ theme }) => {
     const [selectedAction, setSelectedAction] = useState(null);
     const [showProgress, setShowProgress] = useState(false);
     const [progressSteps, setProgressSteps] = useState([]); // Progress steps for selected action
+
+
+
+    const { response, error, loading, refetch: postConfirmation } = useAxios({
+        url: 'https://api.example.com/confirm', // Replace with your actual API endpoint
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+    }, false);
+
 
     // Component mapping for each action
     const actionComponents = {
@@ -54,9 +64,15 @@ const TypeAheadInput = ({ theme }) => {
 
 
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         console.log("Confirmed transaction:", input);
         // Add your confirmation logic here
+
+        const confirmationData = {
+            input: input,
+        };
+
+        await postConfirmation({ data: confirmationData });
 
 
         const steps = [

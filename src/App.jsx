@@ -130,12 +130,13 @@ function App() {
         <div className='flex justify-between items-center'>
           <p>header</p>
           <div className='flex items-center gap-4'>
-            {isConnected && <IconComponent name="LogOut" size={20} onClick={disconnect} />}
+            {isConnected && <IconComponent name="LogOut" size={15} onClick={disconnect} />}
             <Dropdown
-              className='bg-black'
+              className='bg-gray-800 text-white'
               options={themeOptions}
               value={theme}
               onChange={handleThemeChange}
+              theme={theme}
             />
           </div>
         </div>
@@ -245,7 +246,7 @@ const WalletTab = ({ allAccountBalances }) => {
   const [expandedAddresses, setExpandedAddresses] = useState({});
   const [expandedNetworks, setExpandedNetworks] = useState({});
   const [isAllExpanded, setIsAllExpanded] = useState(false);
-  const { address: connectedAddress } = useAccount()
+  const { chainId, address: connectedAddress } = useAccount()
 
 
   useEffect(() => {
@@ -375,7 +376,10 @@ const WalletTab = ({ allAccountBalances }) => {
                     onClick={() => toggleNetworkExpansion(account, index)}
                   >
                     {expandedNetworks[`${account}-${index}`] ? <IconComponent name="ChevronDown" size={10} /> : <IconComponent name="ChevronRight" size={10} />}
-                    <span className="text-xs text-gray-500">{network.network} ({network.chainId})</span>
+                    <div className='flex items-center gap-2'>
+                      <span className="text-xs text-gray-500">{network.network} ({network.chainId})</span>
+                      {/* <span className='text-xs text-gray-500'>{chainId === network.chainId && account.toLowerCase() === connectedAddress?.toLowerCase() && <IconComponent name="Tick" className="text-green-500" size={10} title="Connected Chain" />}</span> */}
+                    </div>
                   </div>
                   {expandedNetworks[`${account}-${index}`] && (
                     <div className="ml-4 mt-1">
@@ -431,42 +435,54 @@ const ActionsTab = () => {
   );
 };
 
-
-// connect wallet button 
-
 const Connect = ({ theme }) => {
-
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chain } = useAccount();
   const { data: balance } = useBalance({ address });
-  const { chain } = useAccount();
-  console.log("balance------------------------->", balance)
-  console.log("chain------------------------->", chain)
-
-
+  const [copied, setCopied] = useState(false);
   if (!isConnected) {
-    return null
+    return null;
   }
-
 
   const shortenAddress = (addr) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(address).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
+    });
+  };
+
   return (
-    <div className={`flex flex-col items-center bg-sidebar text-sidebar-text rounded-md ${theme}`}>
-      <div className='flex flex-start items-center px-3'>
-        <IconComponent name="Wallet" size={10} />
-        <button
-          className="flex item-start px-3 py-1 hover:bg-sidebar-alt transition-colors"
-        >
-          <span className="mr-2 text-xs">{shortenAddress(address)}</span>
-        </button>
+    <div className={`flex flex-col items-start bg-sidebar text-sidebar-text rounded-md w-full ${theme}`}>
+      <div className='flex items-center justify-between w-full px-3 py-2'>
+        <span className="text-xs font-medium">{shortenAddress(address)}</span>
+        <div className="flex flex-row items-center gap-2">
+          <div className='flex pl-1'>
+            <IconComponent name="DotCircle" className="text-green-500" size={10} title="Connected Address" />
+          </div>
+          <div className='flex items-center'>
+            {copied ? <IconComponent name="Tick" size={10} title="Copied" /> : <IconComponent name="Copy" size={10} onClick={handleCopy} title="Copy Address" />}
+          </div>
+
+        </div>
       </div>
-      <div className="flex  px-3 py-1">
-        <span className='text-xs'>{balance?.formatted.slice(0, 6)} {balance?.symbol}</span>
+      <div className="w-full px-3 py-1">
+        <div className="flex items-center">
+          <span className="text-xs">{chain?.name || 'Unknown Chain'}</span>
+        </div>
+        {balance && (
+          <div className="mt-1 ml-6">
+            <div className="flex items-center justify-between">
+              <span className="text-xs">{balance.symbol}</span>
+              <span className="text-xs">{parseFloat(balance.formatted).toFixed(6)}</span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
-  )
-}
-
+  );
+};
 
 
 
