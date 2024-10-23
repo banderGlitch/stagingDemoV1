@@ -15,7 +15,8 @@ import {
     FaChevronRight, 
     FaCheck, 
     FaDotCircle,
-    FaSpinner 
+    FaSpinner,
+    FaArrowRight
   } from 'react-icons/fa';
   import { VscCollapseAll } from "react-icons/vsc";
   
@@ -23,6 +24,7 @@ import {
     LogOut: IoLogOutOutline,
     Refresh: IoIosRefresh,
     Tick: TiTickOutline,
+    ArrowRight: FaArrowRight,
     CircleHalf: BsCircleHalf,
     Link: FaLink,
     Wallet: FaWallet,

@@ -1,8 +1,14 @@
 // Base URL for the API
-const BASE_URL = 'https://api.example.com/v1'; // Replace with your actual base URL
+const BASE_URL = 'https://dummyjson.com'; // Replace with your actual base URL
 
 // Object to store all API endpoints
 export const ENDPOINTS = {
+   //dummy json
+   GET_PRODUCTS: `${BASE_URL}/products`,
+   POST_PRODUCTS: `${BASE_URL}/products`,
+
+
+   
   // Authentication
   LOGIN: `${BASE_URL}/auth/login`,
   LOGOUT: `${BASE_URL}/auth/logout`,

@@ -1,7 +1,25 @@
 import useAxios from './useAxios';
 import { ENDPOINTS } from './endpoints';
 
-// for dummy data
+// for dummy data dummy json data 
+
+export const useGetProducts = () => {
+    return useAxios({
+        url: ENDPOINTS.GET_PRODUCTS,
+        method: 'GET',
+    }, false);
+};
+
+export const usePostProducts = () => {
+    return useAxios({
+        url: ENDPOINTS.POST_PRODUCTS,
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+    }, false);
+};
+
+
+
 export const useConfirmTransaction = () => {
     return useAxios({
         url: ENDPOINTS.CONFIRM_TRANSACTION,

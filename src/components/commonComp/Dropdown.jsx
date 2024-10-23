@@ -26,11 +26,11 @@ const Dropdown = ({ options, value, onChange, className, theme }) => {
                 {value}
             </div>
             {isOpen && (
-                <ul className="absolute z-10 w-full mt-1 bg-input text-input-text shadow-lg">
+                <ul className={`absolute z-10 w-full bg-main text-input-text shadow-lg ${theme}`}>
                     {options.map((option, index) => (
                         <li
                             key={index}
-                            className="cursor-pointer p-2 hover:bg-sidebar-alt"
+                            className="cursor-pointer text-main-text p-2 hover:bg-main"
                             onClick={() => {
                                 onChange({ target: { value: option } });
                                 setIsOpen(false);
