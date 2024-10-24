@@ -238,7 +238,6 @@ const ChainsTab = () => {
   );
 };
 
-
 const WalletTab = ({ allAccountBalances }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [formattedBalances, setFormattedBalances] = useState([]);
@@ -246,10 +245,12 @@ const WalletTab = ({ allAccountBalances }) => {
   const [expandedAddresses, setExpandedAddresses] = useState({});
   const [expandedNetworks, setExpandedNetworks] = useState({});
   const [isAllExpanded, setIsAllExpanded] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
   
   const { chainId, address: connectedAddress } = useAccount()
 
   const handleItemClick = (item) => {
+    setSelectedItem(item);
     console.log("Selected item:", item);
     // You can perform additional actions with the selected item here
   };
@@ -325,6 +326,14 @@ const WalletTab = ({ allAccountBalances }) => {
     // Implement your refresh logic here
   }
 
+  const getItemClassName = (isSelected) => `
+    flex justify-between text-xs cursor-pointer p-1 rounded transition-colors duration-200
+    ${isSelected 
+      ? 'bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-gray-100' 
+      : 'hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
+    }
+  `;
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-full">
@@ -377,7 +386,11 @@ const WalletTab = ({ allAccountBalances }) => {
                   {expandedNetworks[`${account}-${index}`] && (
                     <div className="ml-4 mt-1">
                       <div 
-                        className='flex justify-between text-xs cursor-pointer hover:bg-opacity-10 hover:bg-white p-1 rounded transition-colors duration-200'
+                        className={getItemClassName(
+                          selectedItem?.type === 'native' && 
+                          selectedItem?.account === account && 
+                          selectedItem?.network === network.network
+                        )}
                         onClick={() => handleItemClick({ type: 'native', account, network: network.network, symbol: network.symbol, balance: network.nativeBalance })}
                       >
                         <span>{network.symbol}</span>
@@ -388,7 +401,12 @@ const WalletTab = ({ allAccountBalances }) => {
                           {network.tokens.map((token, tokenIndex) => (
                             <li 
                               key={tokenIndex} 
-                              className="flex justify-between text-xs cursor-pointer hover:bg-opacity-10 hover:bg-white p-1 rounded transition-colors duration-200"
+                              className={getItemClassName(
+                                selectedItem?.type === 'token' && 
+                                selectedItem?.account === account && 
+                                selectedItem?.network === network.network &&
+                                selectedItem?.symbol === token.symbol
+                              )}
                               onClick={() => handleItemClick({ type: 'token', account, network: network.network, symbol: token.symbol, balance: token.balance })}
                             >
                               <span>{token.symbol}</span>
@@ -408,6 +426,362 @@ const WalletTab = ({ allAccountBalances }) => {
     </div>
   );
 };
+
+// const WalletTab = ({ allAccountBalances }) => {
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [formattedBalances, setFormattedBalances] = useState([]);
+//   const [copiedAddress, setCopiedAddress] = useState(null);
+//   const [expandedAddresses, setExpandedAddresses] = useState({});
+//   const [expandedNetworks, setExpandedNetworks] = useState({});
+//   const [isAllExpanded, setIsAllExpanded] = useState(false);
+//   const [selectedItem, setSelectedItem] = useState(null);
+  
+//   const { chainId, address: connectedAddress } = useAccount()
+
+//   const handleItemClick = (item) => {
+//     setSelectedItem(item);
+//     console.log("Selected item:", item);
+//     // You can perform additional actions with the selected item here
+//   };
+
+//   useEffect(() => {
+//     if (allAccountBalances && allAccountBalances.length > 0) {
+//       const formatted = allAccountBalances.reduce((acc, accountArray) => {
+//         accountArray.forEach(account => {
+//           if (!acc[account.account]) {
+//             acc[account.account] = [];
+//           }
+//           acc[account.account].push({
+//             network: account.network,
+//             chainId: account.chainId,
+//             symbol: account.symbol,
+//             nativeBalance: ethers.formatEther(account.nativeBalances),
+//             tokens: account.balances.map(token => ({
+//               symbol: token.symbol,
+//               balance: token.balance
+//             }))
+//           });
+//         });
+//         return acc;
+//       }, {});
+//       setFormattedBalances(formatted);
+//       setIsLoading(false);
+//     }
+//   }, [allAccountBalances]);
+
+//   const toggleAddressExpansion = (address) => {
+//     setExpandedAddresses(prev => ({
+//       ...prev,
+//       [address]: !prev[address]
+//     }));
+//   };
+
+//   const toggleNetworkExpansion = (address, networkIndex) => {
+//     setExpandedNetworks(prev => ({
+//       ...prev,
+//       [`${address}-${networkIndex}`]: !prev[`${address}-${networkIndex}`]
+//     }));
+//   };
+
+//   const copyToClipboard = (address) => {
+//     navigator.clipboard.writeText(address).then(() => {
+//       setCopiedAddress(address);
+//       setTimeout(() => setCopiedAddress(null), 2000);
+//     });
+//   };
+
+//   const formatAddress = (address) => {
+//     if (address.length <= 8) return address;
+//     return `${address.slice(0, 6)}...${address.slice(-4)}`;
+//   };
+
+//   const toggleAllExpansion = () => {
+//     setIsAllExpanded(!isAllExpanded);
+
+//     if (!isAllExpanded) {
+//       // Expand all
+//       const allExpanded = Object.keys(formattedBalances).reduce((acc, address) => {
+//         acc[address] = true;
+//         return acc;
+//       }, {});
+//       setExpandedAddresses(allExpanded);
+//     } else {
+//       // Collapse all
+//       setExpandedAddresses({});
+//     }
+//   };
+
+//   const refreshBalances = async () => {
+//     // Implement your refresh logic here
+//   }
+
+//   if (isLoading) {
+//     return (
+//       <div className="flex justify-center items-center h-full">
+//         <IconComponent name="Spinner" size={48} className="animate-spin text-button" />
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div>
+//       <div className="flex items-center gap-3 mb-1">
+//         <IconComponent name="CollapseAll" size={15} onClick={toggleAllExpansion} />
+//         <IconComponent name="Refresh" size={13} onClick={refreshBalances} />
+//       </div>
+//       {Object.entries(formattedBalances).map(([account, networks]) => (
+//         <div key={account} className="mb-4 p-2 bg-sidebar-alt rounded-lg">
+//           <div className='flex cursor-pointer items-center gap-2 justify-between' onClick={() => toggleAddressExpansion(account)}>
+//             <div className='flex items-center gap-2'>
+//               {expandedAddresses[account] || isAllExpanded ? <IconComponent name="ChevronDown" size={10} /> : <IconComponent name="ChevronRight" size={10} />}
+//               <h4 className="font-medium text-sm">{formatAddress(account)}</h4>
+//               <button
+//                 onClick={(e) => {
+//                   e.stopPropagation();
+//                   copyToClipboard(account);
+//                 }}
+//                 className="text-xs text-button hover:text-button-hover focus:outline-none ml-2"
+//                 title="Copy address"
+//               >
+//                 {copiedAddress === account ? <IconComponent name="Tick" size={10} /> : <IconComponent name="Copy" size={10} />}
+//               </button>
+//             </div>
+//             {account.toLowerCase() === connectedAddress?.toLowerCase() && (
+//               <IconComponent name="DotCircle" className="text-green-500" size={10} title="Connected Address" />
+//             )}
+//           </div>
+
+//           {expandedAddresses[account] && (
+//             <div className="mt-2 ml-4">
+//               {networks.map((network, index) => (
+//                 <div key={index} className="mb-4 last:mb-0">
+//                   <div
+//                     className="flex cursor-pointer items-center gap-2"
+//                     onClick={() => toggleNetworkExpansion(account, index)}
+//                   >
+//                     {expandedNetworks[`${account}-${index}`] ? <IconComponent name="ChevronDown" size={10} /> : <IconComponent name="ChevronRight" size={10} />}
+//                     <div className='flex items-center gap-2'>
+//                       <span className="text-xs text-gray-500">{network.network} ({network.chainId})</span>
+//                     </div>
+//                   </div>
+//                   {expandedNetworks[`${account}-${index}`] && (
+//                     <div className="ml-4 mt-1">
+//                       <div 
+//                         className={`flex justify-between text-xs cursor-pointer p-1 rounded transition-colors duration-200 ${
+//                           selectedItem?.type === 'native' && 
+//                           selectedItem?.account === account && 
+//                           selectedItem?.network === network.network
+//                             ? 'bg-gray-300 dark:bg-gray-700'
+//                             : 'hover:bg-gray-200 dark:hover:bg-gray-800'
+//                         }`}
+//                         onClick={() => handleItemClick({ type: 'native', account, network: network.network, symbol: network.symbol, balance: network.nativeBalance })}
+//                       >
+//                         <span>{network.symbol}</span>
+//                         <span>{parseFloat(parseFloat(network?.nativeBalance).toFixed(6))}</span>
+//                       </div>
+//                       {network.tokens.length > 0 && (
+//                         <ul className="space-y-1 mt-1">
+//                           {network.tokens.map((token, tokenIndex) => (
+//                             <li 
+//                               key={tokenIndex} 
+//                               className={`flex justify-between text-xs cursor-pointer p-1 rounded transition-colors duration-200 ${
+//                                 selectedItem?.type === 'token' && 
+//                                 selectedItem?.account === account && 
+//                                 selectedItem?.network === network.network &&
+//                                 selectedItem?.symbol === token.symbol
+//                                   ? 'bg-gray-300 dark:bg-gray-700'
+//                                   : 'hover:bg-gray-200 dark:hover:bg-gray-800'
+//                               }`}
+//                               onClick={() => handleItemClick({ type: 'token', account, network: network.network, symbol: token.symbol, balance: token.balance })}
+//                             >
+//                               <span>{token.symbol}</span>
+//                               <span>{parseFloat(parseFloat(token.balance).toFixed(6))}</span>
+//                             </li>
+//                           ))}
+//                         </ul>
+//                       )}
+//                     </div>
+//                   )}
+//                 </div>
+//               ))}
+//             </div>
+//           )}
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
+
+
+// const WalletTab = ({ allAccountBalances }) => {
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [formattedBalances, setFormattedBalances] = useState([]);
+//   const [copiedAddress, setCopiedAddress] = useState(null);
+//   const [expandedAddresses, setExpandedAddresses] = useState({});
+//   const [expandedNetworks, setExpandedNetworks] = useState({});
+//   const [isAllExpanded, setIsAllExpanded] = useState(false);
+  
+//   const { chainId, address: connectedAddress } = useAccount()
+
+//   const handleItemClick = (item) => {
+//     console.log("Selected item:", item);
+//     // You can perform additional actions with the selected item here
+//   };
+
+//   useEffect(() => {
+//     if (allAccountBalances && allAccountBalances.length > 0) {
+//       const formatted = allAccountBalances.reduce((acc, accountArray) => {
+//         accountArray.forEach(account => {
+//           if (!acc[account.account]) {
+//             acc[account.account] = [];
+//           }
+//           acc[account.account].push({
+//             network: account.network,
+//             chainId: account.chainId,
+//             symbol: account.symbol,
+//             nativeBalance: ethers.formatEther(account.nativeBalances),
+//             tokens: account.balances.map(token => ({
+//               symbol: token.symbol,
+//               balance: token.balance
+//             }))
+//           });
+//         });
+//         return acc;
+//       }, {});
+//       setFormattedBalances(formatted);
+//       setIsLoading(false);
+//     }
+//   }, [allAccountBalances]);
+
+//   const toggleAddressExpansion = (address) => {
+//     setExpandedAddresses(prev => ({
+//       ...prev,
+//       [address]: !prev[address]
+//     }));
+//   };
+
+//   const toggleNetworkExpansion = (address, networkIndex) => {
+//     setExpandedNetworks(prev => ({
+//       ...prev,
+//       [`${address}-${networkIndex}`]: !prev[`${address}-${networkIndex}`]
+//     }));
+//   };
+
+//   const copyToClipboard = (address) => {
+//     navigator.clipboard.writeText(address).then(() => {
+//       setCopiedAddress(address);
+//       setTimeout(() => setCopiedAddress(null), 2000);
+//     });
+//   };
+
+//   const formatAddress = (address) => {
+//     if (address.length <= 8) return address;
+//     return `${address.slice(0, 6)}...${address.slice(-4)}`;
+//   };
+
+//   const toggleAllExpansion = () => {
+//     setIsAllExpanded(!isAllExpanded);
+
+//     if (!isAllExpanded) {
+//       // Expand all
+//       const allExpanded = Object.keys(formattedBalances).reduce((acc, address) => {
+//         acc[address] = true;
+//         return acc;
+//       }, {});
+//       setExpandedAddresses(allExpanded);
+//     } else {
+//       // Collapse all
+//       setExpandedAddresses({});
+//     }
+//   };
+
+//   const refreshBalances = async () => {
+//     // Implement your refresh logic here
+//   }
+
+//   if (isLoading) {
+//     return (
+//       <div className="flex justify-center items-center h-full">
+//         <IconComponent name="Spinner" size={48} className="animate-spin text-button" />
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div>
+//       <div className="flex items-center gap-3 mb-1">
+//         <IconComponent name="CollapseAll" size={15} onClick={toggleAllExpansion} />
+//         <IconComponent name="Refresh" size={13} onClick={refreshBalances} />
+//       </div>
+//       {Object.entries(formattedBalances).map(([account, networks]) => (
+//         <div key={account} className="mb-4 p-2 bg-sidebar-alt rounded-lg">
+//           <div className='flex cursor-pointer items-center gap-2 justify-between' onClick={() => toggleAddressExpansion(account)}>
+//             <div className='flex items-center gap-2'>
+//               {expandedAddresses[account] || isAllExpanded ? <IconComponent name="ChevronDown" size={10} /> : <IconComponent name="ChevronRight" size={10} />}
+//               <h4 className="font-medium text-sm">{formatAddress(account)}</h4>
+//               <button
+//                 onClick={(e) => {
+//                   e.stopPropagation();
+//                   copyToClipboard(account);
+//                 }}
+//                 className="text-xs text-button hover:text-button-hover focus:outline-none ml-2"
+//                 title="Copy address"
+//               >
+//                 {copiedAddress === account ? <IconComponent name="Tick" size={10} /> : <IconComponent name="Copy" size={10} />}
+//               </button>
+//             </div>
+//             {account.toLowerCase() === connectedAddress?.toLowerCase() && (
+//               <IconComponent name="DotCircle" className="text-green-500" size={10} title="Connected Address" />
+//             )}
+//           </div>
+
+//           {expandedAddresses[account] && (
+//             <div className="mt-2 ml-4">
+//               {networks.map((network, index) => (
+//                 <div key={index} className="mb-4 last:mb-0">
+//                   <div
+//                     className="flex cursor-pointer items-center gap-2"
+//                     onClick={() => toggleNetworkExpansion(account, index)}
+//                   >
+//                     {expandedNetworks[`${account}-${index}`] ? <IconComponent name="ChevronDown" size={10} /> : <IconComponent name="ChevronRight" size={10} />}
+//                     <div className='flex items-center gap-2'>
+//                       <span className="text-xs text-gray-500">{network.network} ({network.chainId})</span>
+//                     </div>
+//                   </div>
+//                   {expandedNetworks[`${account}-${index}`] && (
+//                     <div className="ml-4 mt-1">
+//                       <div 
+//                         className='flex justify-between text-xs cursor-pointer hover:bg-opacity-10 hover:bg-white p-1 rounded transition-colors duration-200'
+//                         onClick={() => handleItemClick({ type: 'native', account, network: network.network, symbol: network.symbol, balance: network.nativeBalance })}
+//                       >
+//                         <span>{network.symbol}</span>
+//                         <span>{parseFloat(parseFloat(network?.nativeBalance).toFixed(6))}</span>
+//                       </div>
+//                       {network.tokens.length > 0 && (
+//                         <ul className="space-y-1 mt-1">
+//                           {network.tokens.map((token, tokenIndex) => (
+//                             <li 
+//                               key={tokenIndex} 
+//                               className="flex justify-between text-xs cursor-pointer hover:bg-opacity-10 hover:bg-white p-1 rounded transition-colors duration-200"
+//                               onClick={() => handleItemClick({ type: 'token', account, network: network.network, symbol: token.symbol, balance: token.balance })}
+//                             >
+//                               <span>{token.symbol}</span>
+//                               <span>{parseFloat(parseFloat(token.balance).toFixed(6))}</span>
+//                             </li>
+//                           ))}
+//                         </ul>
+//                       )}
+//                     </div>
+//                   )}
+//                 </div>
+//               ))}
+//             </div>
+//           )}
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
 
 
 // const WalletTab = ({ allAccountBalances }) => {
